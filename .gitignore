@@ -1,0 +1,15 @@
+node_modules
+dist
+
+# Logs
+
+logs
+*.log
+
+/uploads/*
+!/uploads/.gitkeep
+!/uploads/*.html
+
+# environments/development.env
+# Dockerfile
+data
