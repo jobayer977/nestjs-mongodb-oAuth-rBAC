@@ -61,6 +61,58 @@ export class RegisterDTO {
 	password: string;
 }
 
+export class IndividualRegisterDTO {
+	@ApiProperty({
+		description: 'User Full Name',
+		required: true,
+		type: String,
+		maxLength: 255,
+		example: 'Jon Doe',
+	})
+	@IsNotEmpty()
+	@IsString()
+	@MaxLength(255)
+	username: string;
+
+	@ApiProperty({
+		description: 'User Full Name',
+		required: true,
+		type: String,
+		maxLength: 255,
+	})
+	@IsNotEmpty()
+	@IsString()
+	firstName: string;
+
+	@ApiProperty({
+		description: 'User Full Name',
+		required: true,
+		type: String,
+		maxLength: 255,
+	})
+	@IsNotEmpty()
+	lastName: string;
+
+	@ApiProperty({
+		description: 'User Email',
+		required: true,
+		type: String,
+		maxLength: 255,
+		example: 'jon@gmail.com',
+	})
+	@IsNotEmpty()
+	@IsString()
+	@MaxLength(255)
+	@IsEmail()
+	email: string;
+
+	@ApiProperty({ type: 'string', example: '123456' })
+	@IsString()
+	@MaxLength(255)
+	@MinLength(6)
+	password: string;
+}
+
 export class VerifyDTO {
 	@ApiProperty({
 		description: 'User Email',

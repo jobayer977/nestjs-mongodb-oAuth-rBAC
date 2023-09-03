@@ -51,6 +51,12 @@ export class User extends BaseEntity {
 
 	@Prop({ enum: Provider, default: Provider.LOCAL })
 	provider: string;
+
+	@Prop({ default: null })
+	stripeCustomerId: string;
+
+	@Prop({ default: 0, type: Number, min: 0 })
+	balance: number;
 }
 
 export const UserSchema =
@@ -59,5 +65,6 @@ export const UserSchema =
 UserSchema.pre('save', async function (next) {
 	this.email = this.email.toLowerCase();
 	this.username = this.username.toLowerCase();
+	this.balance = Number(this.balance.toFixed(2));
 	next();
 });

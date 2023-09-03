@@ -58,7 +58,7 @@ export class OtpService {
 			const res = await this.mailerService.sendMail(to, subject, content);
 			return res;
 		} catch (error) {
-			throw error;
+			console.error(`Error in sending OTP to email: ${to}`);
 		}
 	}
 	async sendIndividualForgotPasswordOTP({ to, otp }) {

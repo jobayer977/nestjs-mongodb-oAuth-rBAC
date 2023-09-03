@@ -21,9 +21,50 @@ export enum Provider {
 	LOCAL = 'local',
 }
 
-export enum PublisherRequestStatus {
+export enum PublicationStatus {
 	PENDING = 'PENDING',
 	APPROVED = 'APPROVED',
 	REJECTED = 'REJECTED',
 	IN_REVIEW = 'IN_REVIEW',
+}
+export enum PublicationMemberRoles {
+	ADMIN = 'ADMIN',
+	MEMBER = 'MEMBER',
+	CONTRIBUTOR = 'CONTRIBUTOR',
+}
+
+export enum ArticleStatus {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	REJECTED = 'REJECTED',
+	IN_REVIEW = 'IN_REVIEW',
+}
+
+export enum ParticipantStatus {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	REJECTED = 'REJECTED',
+}
+
+export enum OrderStatus {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	COMPLETED = 'COMPLETED',
+}
+
+export enum PaymentStatus {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	FAILED = 'FAILED',
+}
+
+export enum TransactionType {
+	DEBIT = 'DEBIT',
+	CREDIT = 'CREDIT',
+}
+
+export enum PaymentType {
+	ADMIN = 'ADMIN',
+	AUTHOR = 'AUTHOR',
+	PUBLISHER = 'PUBLISHER',
 }

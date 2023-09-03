@@ -5,7 +5,10 @@ https://docs.nestjs.com/controllers#controllers
 
 import { Controller } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { UpdateActiveStatusDTO } from 'src/base/base.request';
+import {
+	BaseFilterRequestDTO,
+	UpdateActiveStatusDTO,
+} from 'src/base/base.request';
 import { AppHeaders } from 'src/decorators/appHeaders.decorator';
 import { CreateUserDTO, UpdateUserDTO } from './requests';
 import {
@@ -21,8 +24,8 @@ export class UserController {
 	constructor(private userService: UserService) {}
 
 	@Get()
-	async findAll(@Query() options: any) {
-		return this.userService.getAllUsers();
+	async findAll(@Query() options: BaseFilterRequestDTO) {
+		return this.userService.filterFromBD(options);
 	}
 
 	@Post()

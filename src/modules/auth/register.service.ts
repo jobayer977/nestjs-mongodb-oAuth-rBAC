@@ -1,4 +1,9 @@
-import { RegisterDTO, ResendOTPDTO, VerifyDTO } from './requests';
+import {
+	IndividualRegisterDTO,
+	RegisterDTO,
+	ResendOTPDTO,
+	VerifyDTO,
+} from './requests';
 import { UserRoles, UserType } from 'src/enums';
 
 import { Injectable } from '@nestjs/common';
@@ -37,50 +42,52 @@ export class RegisterService {
 			throw error;
 		}
 	}
-	async individual(payload: RegisterDTO): Promise<any> {
+	async individual(payload: IndividualRegisterDTO): Promise<any> {
+		const session = await this.userService.userModel.db.startSession();
+		session.startTransaction();
 		try {
 			const user = await this.userService.userModel.findOne({
 				email: payload.email?.toLowerCase(),
 			});
-			if (user && user?.isVerified) {
-				throw new Error('User already exist');
-			}
-			if (user && user?.isVerified === false) {
+			if (user) {
+				if (user.isVerified) {
+					throw new Error('User already exists');
+				}
+				const userEmail = user.email?.toLowerCase();
 				const saveOtp = await this.otpService.createOrUpdateOtp({
-					email: user.email?.toLowerCase(),
+					email: userEmail,
 				});
-				await this.otpService.sendOTPToEmail({
-					to: user.email,
+				const otpRes = await this.otpService.sendOTPToEmail({
+					to: userEmail,
 					otp: saveOtp.otp,
 				});
-				const res = {
-					otp: saveOtp.otp,
-					email: user.email,
-				};
-				return res;
+				console.log({
+					otpRes,
+				});
+				return { otp: saveOtp.otp, email: userEmail };
 			}
-			const newUser = await this.userService.createUser({
-				email: payload.email,
-				password: payload.password,
-				username: payload.username,
-			});
+			const newUser = await this.userService.createUser(payload);
 			await this.userService.assignUserRole(newUser.id, [UserRoles.INDIVIDUAL]);
 			const saveOtp = await this.otpService.createOrUpdateOtp({
 				email: newUser.email,
 			});
-			await this.otpService.sendOTPToEmail({
+			const res = await this.otpService.sendOTPToEmail({
 				to: newUser.email,
 				otp: saveOtp.otp,
 			});
-			const res = {
+			await session.commitTransaction();
+			return {
 				otp: saveOtp.otp,
 				email: newUser.email,
 			};
-			return res;
 		} catch (error) {
-			throw error;
+			await session.abortTransaction();
+			throw new Error(error.message);
+		} finally {
+			session.endSession(); // Always end the session when done
 		}
 	}
+
 	async individualVerify(payload: VerifyDTO): Promise<any> {
 		try {
 			const user = await this.userService.checkIfUserExist(payload.email);

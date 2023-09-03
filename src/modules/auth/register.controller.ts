@@ -1,7 +1,12 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AppHeaders } from 'src/decorators/appHeaders.decorator';
-import { RegisterDTO, ResendOTPDTO, VerifyDTO } from './requests';
+import {
+	IndividualRegisterDTO,
+	RegisterDTO,
+	ResendOTPDTO,
+	VerifyDTO,
+} from './requests';
 import { RegisterService } from './register.service';
 
 @ApiTags('Auth Register')
@@ -17,8 +22,8 @@ export class RegisterController {
 	}
 
 	@Post('individual')
-	@ApiBody({ type: RegisterDTO })
-	async individual(@Body() registerDto: RegisterDTO): Promise<any> {
+	@ApiBody({ type: IndividualRegisterDTO })
+	async individual(@Body() registerDto: IndividualRegisterDTO): Promise<any> {
 		return this.registerService.individual(registerDto);
 	}
 

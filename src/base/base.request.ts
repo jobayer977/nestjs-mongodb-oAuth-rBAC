@@ -31,6 +31,15 @@ export class BaseFilterRequestDTO {
 	relations?: string[];
 }
 
+export class BaseFindOneByCriteriaRequestDTO {
+	@ApiProperty({
+		example: [],
+		description: 'Relations',
+		required: false,
+	})
+	relations?: string[];
+}
+
 export class UpdateActiveStatusDTO {
 	@ApiProperty({
 		example: true,

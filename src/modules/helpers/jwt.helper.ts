@@ -61,6 +61,22 @@ export class JWTHelper {
 		return { token, exp };
 	}
 
+	public async makeInvitationToken(data: any) {
+		const configAccess = {
+			payload: {
+				...data,
+			},
+			options: {
+				algorithm: 'HS512',
+				expiresIn: ENV.jwt.INVITATION_EXPIRES_IN,
+			},
+		};
+		const token = await this.sign(configAccess.payload, configAccess.options);
+		const tokenData = decode(token);
+		const exp = tokenData.exp;
+		return { token, exp };
+	}
+
 	public async makePermissionToken(data: any) {
 		const configAccess = {
 			payload: {

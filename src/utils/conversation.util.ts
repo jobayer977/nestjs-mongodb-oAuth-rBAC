@@ -19,3 +19,20 @@ export const isBooleanString = (val: any): boolean => {
 	}
 	return false;
 };
+
+export async function asyncForEach(array, callback) {
+	for (let index = 0; index < array.length; index++) {
+		await callback(array[index], index, array);
+	}
+}
+export function convertUsdToCents(usdAmount) {
+	// Multiply the USD amount by 100 and round to nearest integer
+	const centsAmount = Math.round(usdAmount * 100);
+	return centsAmount;
+}
+export function calculatePercentage(
+	amount: number,
+	percentage: number
+): number {
+	return (amount * percentage) / 100;
+}

@@ -1,3 +1,4 @@
+import { StripeService } from './../stripe/stripe.service';
 import { BcryptHelper } from './../helpers/bcrypt.helper';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -7,12 +8,15 @@ import { RolesService } from '../access/roles/roles.service';
 import { CreateUserDTO } from './requests';
 import { User } from './user.schema';
 import { BaseService } from 'src/base/base.service';
+import { asyncForEach } from 'src/utils/conversation.util';
+import { ENV } from 'src/ENV';
 @Injectable()
 export class UserService extends BaseService<User> {
 	constructor(
 		@InjectModel(User.name) readonly userModel: Model<User>,
 		private bcryptHelper: BcryptHelper,
-		private rolesService: RolesService
+		private rolesService: RolesService,
+		private stripeService: StripeService
 	) {
 		super(userModel);
 	}
@@ -30,6 +34,11 @@ export class UserService extends BaseService<User> {
 				throw new Error('User already exist');
 			}
 			user.password = await this.bcryptHelper.hashString(user.password);
+			const createStripeCustomer = await this.stripeService.createCustomer({
+				email: user.email,
+				name: user.firstName + ' ' + user.lastName,
+			});
+			user['stripeCustomerId'] = createStripeCustomer.id;
 			const createdUser = await this.userModel.create(user);
 			await this.assignUserRole(createdUser.id, [UserRoles.INDIVIDUAL]);
 			const response = await this.userModel
@@ -62,8 +71,8 @@ export class UserService extends BaseService<User> {
 			throw error;
 		}
 	}
-	async deleteUser(id: string): Promise<void> {
-		await this.userModel.findByIdAndDelete(id).exec();
+	async deleteUser(id: string): Promise<unknown> {
+		return await this.userModel.findByIdAndDelete(id).exec();
 	}
 	async assignUserRole(id: string, payload: string[]): Promise<User> {
 		const user = await this.userModel
@@ -146,5 +155,25 @@ export class UserService extends BaseService<User> {
 		} catch (error) {
 			throw error;
 		}
+	}
+
+	async getUserByStripeCustomerId(stripeCustomerId: string) {
+		const user = await this.userModel
+			.findOne({
+				stripeCustomerId,
+			})
+			.exec();
+		if (!user) {
+			throw new Error('User not found');
+		}
+		return user;
+	}
+
+	async getSuperAdmin() {
+		const user = await this.userModel.findById(ENV.SUPER_ADMIN_ID);
+		if (!user) {
+			throw new Error('User not found');
+		}
+		return user;
 	}
 }

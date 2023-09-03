@@ -48,10 +48,12 @@ export class LoginService {
 	}
 	async individual(payload: LoginDTO): Promise<any> {
 		try {
-			const user = await this.userService.checkIfUserExist(payload.email);
+			const user = await this.userService.checkIfUserExist(
+				payload.email.toLowerCase()
+			);
 			if (!user) throw new Error('User not found');
 
-			if (user.provider !== Provider.LOCAL) {
+			if (!user?.password) {
 				throw new Error(
 					'You are registered with ' +
 						user.provider +

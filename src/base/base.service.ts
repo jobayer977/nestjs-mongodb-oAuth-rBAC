@@ -1,4 +1,8 @@
-import { BaseFilterRequestDTO, UpdateActiveStatusDTO } from './base.request';
+import {
+	BaseFilterRequestDTO,
+	BaseFindOneByCriteriaRequestDTO,
+	UpdateActiveStatusDTO,
+} from './base.request';
 import { Document, FilterQuery, Model } from 'mongoose';
 import {
 	isBooleanString,
@@ -29,6 +33,7 @@ export abstract class BaseService<T extends Document> {
 					'createdAt',
 					'updatedAt',
 					'deletedAt',
+					'isVerified',
 				];
 				const normalizedSearchFields = schemesProperties.filter((field) => {
 					return !notApplicableFields.includes(field);
@@ -73,9 +78,19 @@ export abstract class BaseService<T extends Document> {
 		}
 	}
 
-	async findOneByCriteria(criteria: Partial<T>): Promise<T> {
+	async findOneByCriteria(
+		criteria: BaseFindOneByCriteriaRequestDTO & Partial<T>
+	): Promise<T> {
 		try {
-			return await this.model.findOne(criteria as any).exec();
+			const _criteria = {
+				...criteria,
+			};
+			delete _criteria?.relations;
+			const query = this.model.findOne(_criteria as any);
+			if (criteria?.relations?.length > 0) {
+				query.populate(criteria.relations);
+			}
+			return await query.exec();
 		} catch (error) {
 			throw error;
 		}
