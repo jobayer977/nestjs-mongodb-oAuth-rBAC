@@ -1,9 +1,7 @@
 import { BaseEntity, BaseEntitySchema } from 'src/base/base.entity';
-import { Schema as MongooseSchema, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Provider, UserType } from 'src/enums';
 
-import { Roles } from '../access/roles/roles.entity';
+import { Provider } from 'src/enums';
 
 @Schema()
 export class User extends BaseEntity {

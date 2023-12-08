@@ -66,7 +66,7 @@ export class LoginService {
 			if (!user.isVerified) throw new Error('User not verified');
 			const hasIndividualRole = await this.userService.checkUserHasRoles(
 				user.id,
-				[UserRoles.INDIVIDUAL, UserRoles.PUBLISHER]
+				[UserRoles.INDIVIDUAL]
 			);
 			if (!hasIndividualRole) throw new Error('User not authorized');
 			const isPasswordMatch = await this.bcryptHelper.compareHash(

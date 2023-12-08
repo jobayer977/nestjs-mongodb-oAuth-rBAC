@@ -42,7 +42,6 @@ export class PasswordService {
 			const checkUserHasIndividualRole =
 				await this.userService.checkUserHasRoles(user.id, [
 					UserRoles.INDIVIDUAL,
-					UserRoles.PUBLISHER,
 				]);
 			if (!checkUserHasIndividualRole) {
 				throw new Error('User not authorized');
@@ -74,7 +73,6 @@ export class PasswordService {
 			const checkUserHasIndividualRole =
 				await this.userService.checkUserHasRoles(user.id, [
 					UserRoles.INDIVIDUAL,
-					UserRoles.PUBLISHER,
 				]);
 			if (!checkUserHasIndividualRole) {
 				throw new Error('User not authorized');
@@ -113,7 +111,6 @@ export class PasswordService {
 			const checkUserHasIndividualRole =
 				await this.userService.checkUserHasRoles(user.id, [
 					UserRoles.INDIVIDUAL,
-					UserRoles.PUBLISHER,
 				]);
 			if (!checkUserHasIndividualRole) {
 				throw new Error('User not authorized');

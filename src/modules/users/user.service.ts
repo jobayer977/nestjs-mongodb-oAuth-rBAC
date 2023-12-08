@@ -1,15 +1,14 @@
-import { StripeService } from './../stripe/stripe.service';
-import { BcryptHelper } from './../helpers/bcrypt.helper';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserRoles, UserType } from 'src/enums';
+import { ENV } from 'src/ENV';
+import { BaseService } from 'src/base/base.service';
+import { UserRoles } from 'src/enums';
 import { RolesService } from '../access/roles/roles.service';
+import { BcryptHelper } from './../helpers/bcrypt.helper';
+import { StripeService } from './../stripe/stripe.service';
 import { CreateUserDTO } from './requests';
 import { User } from './user.schema';
-import { BaseService } from 'src/base/base.service';
-import { asyncForEach } from 'src/utils/conversation.util';
-import { ENV } from 'src/ENV';
 @Injectable()
 export class UserService extends BaseService<User> {
 	constructor(

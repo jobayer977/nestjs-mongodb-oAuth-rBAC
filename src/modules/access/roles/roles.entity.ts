@@ -8,9 +8,6 @@ export class Roles extends BaseEntity {
 
 	@Prop({ required: false })
 	description: string;
-
-	@Prop({ type: [] })
-	permissions: string[];
 }
 
 export const RoleSchema =

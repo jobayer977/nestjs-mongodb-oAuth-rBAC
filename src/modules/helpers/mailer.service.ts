@@ -8,7 +8,7 @@ export class MailerService {
 	async sendMail(to: string, subject: string, content: string) {
 		const resend = new Resend(ENV.RESEND_API_KEY);
 		const res = await resend.emails.send({
-			from: 'team@domain.com',
+			from: 'Acme <onboarding@resend.dev>',
 			to: to,
 			subject: subject,
 			html: content,

@@ -8,16 +8,33 @@ import { Roles } from './roles.entity';
 
 @Injectable()
 export class RolesService extends BaseService<Roles> {
-	private FoundationalRoles = [
-		UserRoles.ADMIN,
-		UserRoles.INDIVIDUAL,
-		UserRoles.PUBLISHER,
-	];
+	private FoundationalRoles = [UserRoles.ADMIN, UserRoles.INDIVIDUAL];
 	constructor(
 		@InjectModel(Roles.name)
 		readonly rolesModel: Model<Roles>
 	) {
 		super(rolesModel);
+		this.seedFoundationalRoles().then();
+	}
+
+	async seedFoundationalRoles() {
+		try {
+			const roles = await this.rolesModel.find({});
+			if (roles.length > 0) return;
+			const adminRole = new this.rolesModel({
+				name: UserRoles.ADMIN,
+				description: 'Admin role',
+			});
+			const individualRole = new this.rolesModel({
+				name: UserRoles.INDIVIDUAL,
+				description: 'Individual role',
+			});
+			await adminRole.save();
+			await individualRole.save();
+			console.log('Foundational roles seeded');
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async filter(reqQuery: FilterRolesRequestDto) {

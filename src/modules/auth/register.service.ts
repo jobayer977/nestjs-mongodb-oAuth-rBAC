@@ -4,14 +4,13 @@ import {
 	ResendOTPDTO,
 	VerifyDTO,
 } from './requests';
-import { UserRoles, UserType } from 'src/enums';
 
 import { Injectable } from '@nestjs/common';
 import { JWTHelper } from '../helpers/jwt.helper';
 import { MailerService } from './../helpers/mailer.service';
 import { OtpService } from './../common/otp/otp.service';
+import { UserRoles } from 'src/enums';
 import { UserService } from '../users/user.service';
-import axios from 'axios';
 
 /*
 https://docs.nestjs.com/providers#services
