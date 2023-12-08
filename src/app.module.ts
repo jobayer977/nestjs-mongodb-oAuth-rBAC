@@ -12,7 +12,6 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './modules/common/common.module';
 import { DatabaseModule } from './database/database.module';
-import { GlobalSettingsModule } from './modules/common/global-settings/global-settings.module';
 import { HelpersModule } from './modules/helpers/helpers.module';
 import { StripeModule } from './modules/stripe/stripe.module';
 import { StripeWebhookModule } from './modules/stripeWebhook/stripewebhook.module';
@@ -20,7 +19,6 @@ import { UserModule } from './modules/users/user.module';
 
 @Module({
 	imports: [
-		GlobalSettingsModule,
 		StripeWebhookModule,
 		StripeModule,
 		CommonModule,

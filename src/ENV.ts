@@ -66,4 +66,6 @@ export const ENV = {
 		'sk_test_51NdESQDmv5qhOAVwAGeqZ14jio7yp1qGFByd7x55W4oSMETHUzrmKDlmhalUBs7w5AZkyDBWtwceoTHKjRlodDLE00pK89Xepm',
 	STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
 	SUPER_ADMIN_ID: process.env.SUPER_ADMIN_ID,
+
+	RESEND_API_KEY: process.env.RESEND_API_KEY,
 };

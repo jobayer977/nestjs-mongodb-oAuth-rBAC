@@ -103,7 +103,7 @@ export abstract class BaseService<T extends Document> {
 			throw error;
 		}
 	}
-	async insertIntoDB(createDto: Partial<T>): Promise<T> {
+	async insertIntoDB(createDto: Partial<T>): Promise<any> {
 		try {
 			const createdModel = new this.model(createDto);
 			return createdModel.save();
@@ -118,7 +118,7 @@ export abstract class BaseService<T extends Document> {
 			throw error;
 		}
 	}
-	async deleteFromDB(id: string): Promise<T> {
+	async deleteFromDB(id: string): Promise<any> {
 		try {
 			return this.model.findByIdAndDelete(id).exec();
 		} catch (error) {

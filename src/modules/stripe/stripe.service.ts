@@ -8,7 +8,7 @@ export class StripeService {
 	private stripe: Stripe;
 	constructor() {
 		this.stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
-			apiVersion: '2022-11-15',
+			apiVersion: '2023-10-16',
 		});
 	}
 

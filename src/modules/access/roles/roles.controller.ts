@@ -65,25 +65,4 @@ export class RolesController {
 	async delete(@Param('id') id: string) {
 		return this.service.deleteRole(id);
 	}
-	@Put(':roleId/assign-permission')
-	@ApiProperty({
-		type: AssignPermissionDTO,
-	})
-	async assignPermission(
-		@Param('roleId') roleId: string,
-		@Body() payload: AssignPermissionDTO
-	) {
-		return this.service.assignPermission(roleId, payload);
-	}
-
-	@Put(':roleId/unassign-permission')
-	@ApiProperty({
-		type: AssignPermissionDTO,
-	})
-	async unassignPermission(
-		@Param('roleId') roleId: string,
-		@Body() payload: AssignPermissionDTO
-	) {
-		return this.service.unassignPermission(roleId, payload);
-	}
 }

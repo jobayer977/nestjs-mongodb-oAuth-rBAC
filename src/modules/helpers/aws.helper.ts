@@ -18,7 +18,7 @@ export class AWSHelper {
 
 	async uploadFile(buffer: Buffer, filename: string): Promise<string> {
 		const params = {
-			Bucket: `journalocity/${ENV.env}/images`,
+			Bucket: `domain/${ENV.env}/images`,
 			Key: `${new Date().getTime()}-${filename}`,
 			Body: buffer,
 			ACL: 'public-read',

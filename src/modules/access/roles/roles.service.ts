@@ -1,20 +1,10 @@
-import { UserService } from './../../users/user.service';
-import { PermissionService } from './../permission/permission.service';
-/*
-https://docs.nestjs.com/providers#services
-*/
-
-import { BaseService } from 'src/base/base.service';
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { Roles } from './roles.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-	AssignPermissionDTO,
-	FilterRolesRequestDto,
-	UpdateRoleRequestDto,
-} from './requests';
+import { Model } from 'mongoose';
+import { BaseService } from 'src/base/base.service';
 import { UserRoles } from 'src/enums';
+import { FilterRolesRequestDto, UpdateRoleRequestDto } from './requests';
+import { Roles } from './roles.entity';
 
 @Injectable()
 export class RolesService extends BaseService<Roles> {
@@ -25,8 +15,7 @@ export class RolesService extends BaseService<Roles> {
 	];
 	constructor(
 		@InjectModel(Roles.name)
-		readonly rolesModel: Model<Roles>,
-		private permissionService: PermissionService
+		readonly rolesModel: Model<Roles>
 	) {
 		super(rolesModel);
 	}
@@ -37,60 +26,6 @@ export class RolesService extends BaseService<Roles> {
 			.populate(['permissions'])
 			.exec();
 		return roles;
-	}
-
-	async assignPermission(roleId: string, payload: AssignPermissionDTO) {
-		try {
-			const role = await this.rolesModel.findById(roleId);
-			if (!role) throw new Error('Role not found');
-			const permission: any =
-				await this.permissionService.permissionModel.findOne({
-					name: payload?.permission,
-				});
-			if (!permission) {
-				throw new Error('Permission not found');
-			}
-			const isPermissionAssigned = role.permissions.find(
-				(permission) => permission === payload.permission
-			);
-			if (isPermissionAssigned) {
-				throw new Error('Permission already assigned');
-			}
-			role.permissions.push(permission.name);
-			role.save();
-			const response = await this.rolesModel.findById(roleId);
-			return response;
-		} catch (error) {
-			throw error;
-		}
-	}
-
-	async unassignPermission(roleId: string, payload: AssignPermissionDTO) {
-		try {
-			const role = await this.rolesModel.findById(roleId);
-			if (!role) throw new Error('Role not found');
-			const permission: any =
-				await this.permissionService.permissionModel.findOne({
-					name: payload?.permission,
-				});
-			if (!permission) {
-				throw new Error('Permission not found');
-			}
-			const isPermissionAssigned = role.permissions.find(
-				(permission) => permission === payload.permission
-			);
-			if (!isPermissionAssigned) {
-				throw new Error('Permission not assigned');
-			}
-			role.permissions = role.permissions.filter(
-				(permission) => permission !== payload.permission
-			);
-			role.save();
-			const response = await this.rolesModel.findById(roleId);
-			return response;
-		} catch (error) {
-			throw error;
-		}
 	}
 
 	async deleteRole(roleId: string) {
